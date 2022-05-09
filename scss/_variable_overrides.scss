@@ -1,0 +1,166 @@
+
+body {
+    font-family: 'Lato', sans-serif;
+}
+
+.form-inline{
+    height: 70px;
+}
+
+#header h1{
+    font-family: 'DM Sans', sans-serif;
+    font-weight:700;
+    color: #D04F4F;
+}
+
+.last_displayed {
+    z-index: 99;
+    position: absolute;
+}
+
+.btn {
+    border-radius: 5px;
+    height: 100%;
+}
+.btn.filtre-open{
+    border-radius: 0 5px 0 0;
+    border-left: none;
+}
+
+input.filtre-open{
+    border-radius: 5px 0 0 0;
+    border-right: none;
+}
+
+input {
+    border-radius: 5px;
+    width: 100%;
+}
+
+/* filtres */
+.filtre-div{
+    font-family: 'Lato', sans-serif;
+    font-size: 18px;
+    font-weight: 700, bold;
+    width: 100%;
+}
+
+/* Ingredients */
+#ingredients-button.not_display{
+    display: none;
+}
+#ingredients-input.not_display{
+    display: none;
+}
+
+#ingredients-fields.not_display{
+    display: none;
+}
+
+/* Appareils */
+#appareils-button.not_display{
+    display: none;
+}
+#appareils-input.not_display{
+    display: none;
+}
+#appareils-fields.not_display{
+    display: none;
+}
+
+/* ustensiles */
+#ustensiles-button.not_display{
+    display: none;
+}
+#ustensiles-input.not_display{
+    display: none;
+}
+#ustensiles-fields.not_display{
+    display: none;
+}
+
+.item{
+    line-height: 30px;
+    font-size: 18px;
+    font-weight: 400;
+    font-family: 'Lato', sans-serif;
+    border: none;
+    text-align: left;
+}
+.item.not_display{
+    display: none;
+}
+
+.tag_filtre {
+    border-radius: 5px;
+    width: 100%;
+}
+.tag_contain {
+    align-items: center;
+    flex-direction: row;
+}
+.tag_name {
+    color: white;
+    text-align: center;
+}
+
+.card{
+    width: 380px;
+    border-radius: 5px;
+}
+
+.card_top.not_display{
+    display: none;
+}
+
+.card-title{
+    font-size: 18px;
+    font-weight: 400;
+}
+
+.card-title.bold{
+    font-weight: 700;
+    text-align: center;
+}
+
+.card-header{
+    height: 178px;
+    background-color: #C7BEBE;
+}
+
+.card-body{
+    height: 202px;
+    background-color: #E7E7E7;
+}
+
+.recipe div{
+    margin:0;
+    padding:0;
+}
+p.ingredient{
+    margin: 0;
+    font-family: 'Lato', sans-serif;
+    font-size: 12px;
+    line-height: 14.4px;
+    margin:0;
+}
+span.ingredient__name{
+    font-weight: 700;
+}
+p.description{
+    width: 171px;
+    font-family: 'Roboto', sans-serif;
+    font-size: 12px;
+    line-height: 12px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 8; /* number of lines to show */
+    -webkit-box-orient: vertical;
+
+}
+
+.icon {
+    width: 20px;
+    height: 20px;
+}

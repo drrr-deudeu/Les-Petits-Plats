@@ -1,0 +1,23 @@
+{
+  "name": "les-petits-plats",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/drrr-deudeu/Les-Petits-Plats.git"
+  },
+  "author": "Denis Rouiller",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/drrr-deudeu/Les-Petits-Plats/issues"
+  },
+  "homepage": "https://github.com/drrr-deudeu/Les-Petits-Plats#readme",
+  "dependencies": {
+    "bootstrap": "^5.1.3",
+    "sass": "^1.51.0"
+  }
+}
