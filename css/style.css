@@ -11132,8 +11132,14 @@ body {
   color: #D04F4F;
 }
 
-.last_displayed {
+.lost_displayed {
   z-index: 99;
+  position: absolute;
+}
+
+.allfilters {
+  z-index: 99;
+  width: 100%;
   position: absolute;
 }
 

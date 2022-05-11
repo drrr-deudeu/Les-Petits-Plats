@@ -6,11 +6,39 @@ class RecipesController{
         this._recipesManager = RecipesManagerFactory(recipesData)
         RecipesController.instance = this
         RecipesController.exists = true
+
+        this.DisplayRecipes()
+        this.DisplayFilters()
+        this.initFiltresListeners()
         return this
+    }
+
+    DisplayRecipes(){
+        const divRecipe = document.querySelector("#recipes")
+        this._recipesManager.recipes.forEach(recipe => this.DisplayRecipe(divRecipe,recipe.recipeCard))
+    }
+
+    DisplayRecipe(divRecipe,render) {
+        divRecipe.innerHTML += render()
+    }
+    
+    DisplayFilters() {
+        this._recipesManager.renderFilters()
     }
 
     get recipesManager(){
         return this._recipesManager
+    }
+
+
+    initFiltresListeners(){
+        this._recipesManager.filtersMgr._lstMgr.forEach(lm => {
+            this.initFilterListeners(lm)
+        })
+    }
+
+    initFilterListeners(lm){
+
     }
 
 }
@@ -38,33 +66,43 @@ function RecipesManagerFactory(recipesData){
 
     })
 
+    // le manager des filtres
+    const filtersMgr = new FiltersManager(ingredientsList,appareilsList,ustensilesList)
+    
+    
     // set listener on mainsearch
     document.querySelector("#mainsearch").addEventListener('input',TreatValue)
+
+
+    function renderFilters(){
+        filtersMgr.renderFilters()
+    }
 
     function TreatValue(event){
         TreatMainSearchValue(normalizeString(event.target.value))    
     }
 
     function RenderAllFiltresItems(){
-        RenderDisplayFiltreItems(ingredientsList,'ingr_')
-        RenderDisplayFiltreItems(appareilsList,'app_')
-        RenderDisplayFiltreItems(ustensilesList,'ust_')
+        filtersMgr.RenderAllFiltresItems()
     }
 
     function ClearAllFiltresItems(flag){
-        ClearList(ingredientsList,flag)
-        ClearList(appareilsList,flag)
-        ClearList(ustensilesList,flag)
+        filtersMgr.ClearAllFiltreItems(flag)
     }
+
     function ClearAndRenderAllFiltresItems(flag) {
         ClearAllFiltresItems(flag)
         RenderAllFiltresItems()
     }
 
-    function resetDisplay(flag=true){
+    function resetRecipeCards(flag){
         recipes.forEach(recipe =>{
             recipe.setDisplay(flag)
         })
+    }
+
+    function resetDisplay(flag=true){
+        resetRecipeCards(flag)
         ClearAndRenderAllFiltresItems(flag)
     }
 
@@ -132,15 +170,7 @@ function RecipesManagerFactory(recipesData){
     }
 
     function SetDisplayAllFiltresItems(recipe){
-        SetDisplayItemsFiltre(ingredientsList,recipe.ingredients)
-        SetDisplayItemsFiltre(appareilsList,recipe.appareils)
-        SetDisplayItemsFiltre(ustensilesList,recipe.ustensiles)
-    }
-
-    function ClearList(filtresList,flag) {
-        filtresList.forEach(item => {
-            item.display = flag
-        })
+        filtersMgr.SetDisplayItemsAllFiltres([recipe.ingredients,recipe.appareils,recipe.ustensiles])
     }
 
     function SearchInRecipeList(list,value){
@@ -154,30 +184,12 @@ function RecipesManagerFactory(recipesData){
         return ret
     }
 
-    function RenderDisplayFiltreItems(filtresList,prefixIDFiltre) {
-        filtresList.forEach((item,index) => {
-            el = document.getElementById(prefixIDFiltre+index)
-            switch(item.display){
-                case false:
-//                    el.classList.add('not_display')
-                    el.classList.add('d-none')
-                    break;
-                case true:
-//                    el.classList.remove('not_display')
-                    el.classList.remove('d-none')
-                    break;
-            }
-        })
-    }
-
-    function SetDisplayItemsFiltre(filtresList,filtreListRecipe){
-        filtreListRecipe.forEach(item => {
-            filtresList[item.index].display = true
-        })
-    }
-
     function IngredientInRecipe(recipe,value){
         return SearchInRecipeList(recipe.ingredients,value)
+    }
+
+    function normalizeString(str) {
+        return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase()
     }
 
     // function IdsFusion(idsTarget,newIds) {
@@ -197,32 +209,10 @@ function RecipesManagerFactory(recipesData){
     //     })
     //     return ids
     // }
-
-    function normalizeString(str) {
-        return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase()
-    }
-
-    function renderFilter(taille_colonne,filterName,filterList,prefixID, style) {        
-        filterList.forEach((item,index) => {
-            if(index === 0){
-                document.querySelector(filterName).innerHTML = ""    
-            }
-            document.querySelector(filterName).innerHTML += `<button class="btn col-${taille_colonne} ${style} 
-                text-white item ${prefixID}item" id="${prefixID}${index}" 
-                data-set="${filterList[index].ids}" data-name="${item.value}" data-index=${index} data-prefix="${prefixID}" onclick="clickItem(this)">
-                ${item.value}</button>`
-        })
-    }
-
-    function renderFilters(){
-        renderFilter(4,'#filtre-ingredients',ingredientsList,'ingr_','btn-primary')
-        renderFilter(12,'#filtre-appareils',appareilsList,'app_','btn-success')
-        renderFilter(6,'#filtre-ustensiles',ustensilesList,'ust_','btn-danger')
-
-    }
+   
 
     console.log(ingredientsList)
     console.log(appareilsList)
     console.log(ustensilesList)
-    return {recipes, renderFilters, ingredientsList, appareilsList, ustensilesList, TreatMainSearchValue, resetDisplay, RenderAllFiltresItems, SetDisplayAllFiltresItems}
+    return {recipes, filtersMgr,renderFilters, ingredientsList, appareilsList, ustensilesList, TreatMainSearchValue, resetDisplay, resetRecipeCards, RenderAllFiltresItems, SetDisplayAllFiltresItems}
 }
