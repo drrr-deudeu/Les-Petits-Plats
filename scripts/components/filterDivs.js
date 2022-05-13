@@ -114,13 +114,6 @@ class ListFilterManager {
         })
     }
 
-    get elOpen(){
-        return this._elOpen
-    }
-    get elClose(){
-        return this._elClose
-    }
-
     get list(){
         return this._list
     }
@@ -162,18 +155,16 @@ class FiltersManager {
     }
 }
 
-
-function openFilterDivs(id,close_column_size,open_column_size,prefix,indexFiltre){
+function openFilterDivs(id,indexFiltre){
     const recipesCtrl = (new RecipesController(null))
     const div = document.getElementById(id.toLowerCase()+'-div')
-    // div.setAttribute('class',`mt-2 pb-0 me-1 col-${open_column_size}`)
     div.setAttribute('class',`mt-2 pb-0 me-1 col-${recipesCtrl.filtersMgr.lstMgr[indexFiltre].ncol_div_open()}`)
     document.getElementById(id.toLowerCase()+"s-input").classList.remove("not_display")
     document.getElementById(id.toLowerCase()+"s-fields").classList.remove("not_display")
     document.getElementById(id.toLowerCase()+"s-button").classList.add("not_display")
 }
 
-function closeFilterDivs(id,close_column_size,open_column_size,prefix,indexFiltre){
+function closeFilterDivs(id){
     const div = document.getElementById(id.toLowerCase()+'-div')
     div.setAttribute('class','mt-2 pb-0 me-1 col-2')
     document.getElementById(id.toLowerCase()+"s-fields").classList.add("not_display")
@@ -181,18 +172,12 @@ function closeFilterDivs(id,close_column_size,open_column_size,prefix,indexFiltr
     document.getElementById(id.toLowerCase()+"s-button").classList.remove("not_display")
 }
 
-
 function closeTag(el) {
     const recipesCtrl = (new RecipesController(null))
     recipesCtrl.CloseTag(el)
-    // recipesCtrl.tagsMgr.RemoveTag(el)
-    // recipesCtrl.resetDisplay(true)
 }
 
 function clickItem(el) {
     const recipesCtrl = (new RecipesController(null))
-
     recipesCtrl.AddTag(el)
-//    recipesCtrl.RenderAllFiltresItems()
-
 }

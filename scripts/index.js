@@ -1,11 +1,10 @@
 
 function BuildRecipes() {
-    const recipesController = new RecipesController(recipes)
-    return recipesController.recipesManager
+    new RecipesController(recipes)
 }
 
 function initApp() {
-    const recipesManager = BuildRecipes()
+    BuildRecipes()
 }
 
 initApp()

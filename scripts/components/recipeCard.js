@@ -71,7 +71,6 @@ function recipeFactory(recipeData){
             return
         }
         document.querySelector('#cardtop_'+id).classList.add('not_display')
-        console.log("DISPLAYRECIPE:"+display)
     }
 
     function getDisplay(){
