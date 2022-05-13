@@ -11,11 +11,10 @@ class ListFilterManager {
         this._n_col = 0
         this._html = ""
         this._style = style
-
+        return this
     }
 
     calc_n_col(nel){
-        console.log(nel)
         if(nel < 15){
             return 1
         }
@@ -28,7 +27,6 @@ class ListFilterManager {
     _nbdisplay()
     {
         let nb_disp = this._list.filter(elt => elt.display === true).length
-        console.log("display:"+nb_disp)
         return nb_disp
     }
 
@@ -69,9 +67,24 @@ class ListFilterManager {
         })
     }
 
+    ncol_div_open() {            
+        let ncol_open = 0
+        switch(this._n_col){
+            case 1:
+                ncol_open = 2
+                break
+            case 2:
+                ncol_open = 4
+                break
+            case 3:
+                ncol_open = 6
+                break
+        }
+        return ncol_open
+    }
+
     _renderList() {
         const filterName = '#filtre-'+this._name+'s'
-        console.log(filterName+" nbcol:"+this._n_col)
         this._list.forEach((item,index) => {
             if(index === 0){
                 document.querySelector(filterName).innerHTML = ""    
@@ -119,6 +132,7 @@ class FiltersManager {
         this._lstMgr = [new ListFilterManager(ingredients,'ingr_','ingredient','btn-primary'),
                         new ListFilterManager(appareils,'app_','appareil','btn-success'),
                         new ListFilterManager(ustensiles,'ust_','ustensile','btn-danger')]
+        return this            
     }
 
     get lstMgr(){
@@ -149,74 +163,36 @@ class FiltersManager {
 }
 
 
-function openFilterDivs(id,close_column_size,open_column_size){
+function openFilterDivs(id,close_column_size,open_column_size,prefix,indexFiltre){
+    const recipesCtrl = (new RecipesController(null))
     const div = document.getElementById(id.toLowerCase()+'-div')
-    div.classList.remove('col-'+close_column_size)
-    div.classList.add('col-'+open_column_size)
+    // div.setAttribute('class',`mt-2 pb-0 me-1 col-${open_column_size}`)
+    div.setAttribute('class',`mt-2 pb-0 me-1 col-${recipesCtrl.filtersMgr.lstMgr[indexFiltre].ncol_div_open()}`)
     document.getElementById(id.toLowerCase()+"s-input").classList.remove("not_display")
     document.getElementById(id.toLowerCase()+"s-fields").classList.remove("not_display")
     document.getElementById(id.toLowerCase()+"s-button").classList.add("not_display")
 }
 
-function closeFilterDivs(id,close_column_size,open_column_size){
+function closeFilterDivs(id,close_column_size,open_column_size,prefix,indexFiltre){
     const div = document.getElementById(id.toLowerCase()+'-div')
-    div.classList.remove('col-'+open_column_size)
-    div.classList.add('col-'+close_column_size)
-
+    div.setAttribute('class','mt-2 pb-0 me-1 col-2')
     document.getElementById(id.toLowerCase()+"s-fields").classList.add("not_display")
     document.getElementById(id.toLowerCase()+"s-input").classList.add("not_display")
     document.getElementById(id.toLowerCase()+"s-button").classList.remove("not_display")
 }
 
-function AddTag(recipesManager, el) {
-    let list, tag_list, color
-
-    switch(el.dataset.prefix){
-        case 'ingr_':
-            list = recipesManager.ingredientsList
-            tag_list = 'ingredient-tags'
-            color = 'primary'
-            break;
-        case 'app_':
-            list = recipesManager.appareilsList
-            tag_list = 'appareil-tags'
-            color = 'success'
-            break;
-        case 'ust_':
-            list = recipesManager.ustensilesList
-            tag_list = 'ustensile-tags'
-            color = 'danger'
-            break;
-    }
-
-    el_tags = document.getElementById(tag_list)
-    if(el_tags.innerHTML === null) {
-        el_tags.innerHTML = ""
-    }
-    el_tags.innerHTML += `<div class="col bg-${color} m-2 tag_filtre py-2" id="tag_${el.dataset.prefix}_${el.dataset.index}" data-prefix="${el.dataset.prefix}" data-index="${el.dataset.index}">
-                        <div class="row tag_contain">
-                            <div class="col-8 tag_name"><span>${el.dataset.name}</span></div>
-                            <button class="col-2 btn btn-${color} tag_button" data-id="tag_${el.dataset.prefix}_${el.dataset.index}" onclick="closeTag(this)"><img src="assets/icons/close_tag.svg"></button>
-                        </div>
-                        </div>`
-}
 
 function closeTag(el) {
-    document.getElementById(el.dataset.id).remove()
-    const recipesManager = (new RecipesController(null)).recipesManager
-    recipesManager.resetDisplay(true)
+    const recipesCtrl = (new RecipesController(null))
+    recipesCtrl.CloseTag(el)
+    // recipesCtrl.tagsMgr.RemoveTag(el)
+    // recipesCtrl.resetDisplay(true)
 }
 
 function clickItem(el) {
-    const recipesManager = (new RecipesController(null)).recipesManager
+    const recipesCtrl = (new RecipesController(null))
 
-    AddTag(recipesManager,el)
-    let ids = el.dataset.set.split(',')
-    recipesManager.resetRecipeCards(false)
-    ids.forEach(recipeId => {
-        recipesManager.recipes[recipeId-1].setDisplay(true)
-        recipesManager.SetDisplayAllFiltresItems(recipesManager.recipes[recipeId-1])
-    })
-    recipesManager.RenderAllFiltresItems()
+    recipesCtrl.AddTag(el)
+//    recipesCtrl.RenderAllFiltresItems()
 
 }

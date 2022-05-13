@@ -1,18 +1,123 @@
 class RecipesController{
     constructor(recipesData){
+        //singleton
         if (RecipesController.exists) {
             return RecipesController.instance
         }
+        // données de base
+        this.prefixs = ['ingr_','app_','ust_']
+
+        // le manager des recettes
         this._recipesManager = RecipesManagerFactory(recipesData)
-        RecipesController.instance = this
-        RecipesController.exists = true
+
+        // le manager des filtres
+        this.filtersMgr = new FiltersManager(this._recipesManager.ingredientsList
+            ,this._recipesManager.appareilsList,this._recipesManager.ustensilesList)
+
+        // Le manager des tags
+        this.tagsMgr = new TagsManager()
 
         this.DisplayRecipes()
         this.DisplayFilters()
-        this.initFiltresListeners()
+        this.initListeners()
+
+        RecipesController.instance = this
+        RecipesController.exists = true
         return this
     }
 
+    AddTag(el){
+        this.tagsMgr.AddTag(el)
+        this.SearchRecipes()
+    }
+
+    CloseTag(el){
+        this.tagsMgr.RemoveTag(el)
+        this.SearchRecipes()
+    }
+
+    setFlagsTabs(tab){
+        this.recipesManager.recipes.forEach((r,index) => {
+            tab.push(0)
+        })
+    }
+    SearchRecipes(){
+        // on reset les recipes sur la base true
+        this.resetDisplay(true)
+        this.FiltreRecipes()
+        this.TreatMainSearchValue()
+        this.SetDisplayAllFiltres()
+    }
+
+    FiltreRecipes(){
+        const flagTabResult = []
+        const flagTabNew = []
+        this.setFlagsTabs(flagTabResult,0)
+        this.setFlagsTabs(flagTabNew,0)
+        let flagFirst = true
+
+        // on filtre les recipes sur la base des tags
+        // on parcourt les valeurs => la valeur de l'index dans les listes associées
+        this.prefixs.forEach((prefix,indexliste) => {
+            this.tagsMgr.tagByList[prefix].tagList.forEach(value_index =>{
+                // les ids des recettes associées
+                this.filtersMgr.lstMgr[indexliste].list[value_index].ids.forEach(id =>{
+                    flagTabNew[id - 1] = 1
+                    if(flagFirst){
+                        flagTabResult[id - 1] = 1
+                    }
+                })
+                flagFirst = false
+                flagTabNew.forEach((v,index) =>{
+                    if(!flagTabResult[index] || !v){
+                        flagTabResult[index] = 0
+                    }
+                })
+                this.filtersMgr.lstMgr[indexliste].list[value_index].ids.forEach(id =>{
+                    flagTabNew[id - 1] = 0
+                })
+            })
+        })
+        // set Final des displays
+        // si il y a au moins un tag:
+        if(flagFirst === false){
+            this.recipesManager.recipes.forEach((recip,index) => {
+                recip.setDisplay((flagTabResult[index] && recip.getDisplay())?true:false)
+            })
+        }
+        this.filtersMgr.renderFilters()
+    }
+
+    TreatMainSearchValue(){
+        let value = this._mainSearchValue
+        if(value.length < 3){
+            return
+        }
+        /* La recherche: d'abord dans le titre, puis dans les ingredients, puis dans la description */
+        this.recipesManager.recipes.forEach(recipe =>{
+            if(recipe.getDisplay()){
+    
+                if(normalizeString(recipe.recipe.name).includes(value)
+                    || this.recipesManager.IngredientInRecipe(recipe,value)
+                    || normalizeString(recipe.recipe.description).includes(value)){
+                    recipe.setDisplay(true)
+                }
+                else {
+                    recipe.setDisplay(false)
+                }
+            }
+        })
+    }
+
+    SetDisplayAllFiltres(){
+        this.ClearAllFiltresItems(false)
+        this.recipesManager.recipes.forEach(recipe => {
+            if(recipe.getDisplay())
+                this.SetDisplayAllFiltresItems(recipe)
+        })
+        this.renderFilters()
+    }
+    
     DisplayRecipes(){
         const divRecipe = document.querySelector("#recipes")
         this._recipesManager.recipes.forEach(recipe => this.DisplayRecipe(divRecipe,recipe.recipeCard))
@@ -23,16 +128,44 @@ class RecipesController{
     }
     
     DisplayFilters() {
-        this._recipesManager.renderFilters()
+        this.renderFilters()
     }
 
-    get recipesManager(){
-        return this._recipesManager
+    renderFilters(){
+        this.filtersMgr.renderFilters()
     }
 
+    RenderAllFiltresItems(){
+        this.filtersMgr.RenderAllFiltresItems()
+    }
 
-    initFiltresListeners(){
-        this._recipesManager.filtersMgr._lstMgr.forEach(lm => {
+    ClearAllFiltresItems(flag){
+        this.filtersMgr.ClearAllFiltreItems(flag)
+    }
+
+    ClearAndRenderAllFiltresItems(flag) {
+        this.ClearAllFiltresItems(flag)
+        this.RenderAllFiltresItems()
+    }
+
+    SetDisplayAllFiltresItems(recipe){
+        this.filtersMgr.SetDisplayItemsAllFiltres([recipe.ingredients,recipe.appareils,recipe.ustensiles])
+    }
+
+    resetDisplay(flag=true){
+        this._recipesManager.resetRecipeCards(flag)
+        this.ClearAndRenderAllFiltresItems(flag)
+    }
+
+    initListeners(){
+        // set listener on mainsearch
+        this._mainSearchValue = ""
+        document.querySelector("#mainsearch").addEventListener('input',e => {
+            this._mainSearchValue = normalizeString(e.target.value)
+            this.SearchRecipes()  
+        })
+
+        this.filtersMgr._lstMgr.forEach(lm => {
             this.initFilterListeners(lm)
         })
     }
@@ -41,6 +174,16 @@ class RecipesController{
 
     }
 
+    get recipesManager(){
+        return this._recipesManager
+    }
+    get mainSearchValue(){
+        return this._mainSearchValue
+    }
+}
+
+function normalizeString(str) {
+    return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase()
 }
 
 function RecipesManagerFactory(recipesData){
@@ -48,7 +191,7 @@ function RecipesManagerFactory(recipesData){
     const appareilsList = []
     const ustensilesList = []
     const recipes = []
-    let mainSearchValue = ""
+    // let mainSearchValue = ""
     let ind
 
     recipesData.forEach(recipe => {
@@ -66,44 +209,10 @@ function RecipesManagerFactory(recipesData){
 
     })
 
-    // le manager des filtres
-    const filtersMgr = new FiltersManager(ingredientsList,appareilsList,ustensilesList)
-    
-    
-    // set listener on mainsearch
-    document.querySelector("#mainsearch").addEventListener('input',TreatValue)
-
-
-    function renderFilters(){
-        filtersMgr.renderFilters()
-    }
-
-    function TreatValue(event){
-        TreatMainSearchValue(normalizeString(event.target.value))    
-    }
-
-    function RenderAllFiltresItems(){
-        filtersMgr.RenderAllFiltresItems()
-    }
-
-    function ClearAllFiltresItems(flag){
-        filtersMgr.ClearAllFiltreItems(flag)
-    }
-
-    function ClearAndRenderAllFiltresItems(flag) {
-        ClearAllFiltresItems(flag)
-        RenderAllFiltresItems()
-    }
-
     function resetRecipeCards(flag){
         recipes.forEach(recipe =>{
             recipe.setDisplay(flag)
         })
-    }
-
-    function resetDisplay(flag=true){
-        resetRecipeCards(flag)
-        ClearAndRenderAllFiltresItems(flag)
     }
 
     function UpdateList(recipeObjList,recipeObjId,managerList) {
@@ -122,57 +231,6 @@ function RecipesManagerFactory(recipesData){
         })
     }
 
-    function TreatMainSearchValue(value){
-        // Si la valeur n'a pas changé , les mêmes recettes doivent être rendues
-        if(value === mainSearchValue)
-            return
-
-        // si la recherche est moins longue que celle stockée, alors il faut recommencer toute la recherche
-        if(value.length < mainSearchValue.length){
-            resetDisplay()
-        }
-        // sinon la longeur est soit identique , soit supérieure
-        else{
-            if(value.length === mainSearchValue.length){
-                // longueur identique, mais valeur forcément différente, cf. le premier test de la fonction
-                resetDisplay()
-            }
-            else{
-                // longueur supérieure, mais le début est peut-être différent
-                if(value.slice(0,mainSearchValue.length) !== mainSearchValue){
-                    resetDisplay()
-                }
-            }
-        }
-
-        mainSearchValue = value
-        if(value.length < 3){
-            resetDisplay()
-            return
-        }
-
-        /* Clear des filtres */
-        ClearAllFiltresItems(false)
-
-        /* La recherche: d'abord dans le titre, puis dans les ingredients, puis dans la description */
-        recipes.forEach(recipe =>{
-            if(recipe.display){
-                if(normalizeString(recipe.recipe.name).includes(value)
-                    || IngredientInRecipe(recipe,value)
-                    || normalizeString(recipe.recipe.description).includes(value)){
-                    recipe.setDisplay(true)
-                    SetDisplayAllFiltresItems(recipe) 
-                }
-                else recipe.setDisplay(false)
-            }
-        })
-        RenderAllFiltresItems()
-    }
-
-    function SetDisplayAllFiltresItems(recipe){
-        filtersMgr.SetDisplayItemsAllFiltres([recipe.ingredients,recipe.appareils,recipe.ustensiles])
-    }
-
     function SearchInRecipeList(list,value){
         let ret = false
 
@@ -188,31 +246,8 @@ function RecipesManagerFactory(recipesData){
         return SearchInRecipeList(recipe.ingredients,value)
     }
 
-    function normalizeString(str) {
-        return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase()
-    }
-
-    // function IdsFusion(idsTarget,newIds) {
-    //     newIds.forEach(id => {
-    //         if(idsTarget.filter(idT => idT === id).length === 0){
-    //             idsTarget.push(id)
-    //         }
-    //     })
-    // }
-
-    // function SearchInList(list,value) {
-    //     const ids = []
-    //     list.forEach(item => {
-    //         if(normalizeString(item.value).includes(value)){
-    //             IdsFusion(ids,item.ids)
-    //         }
-    //     })
-    //     return ids
-    // }
-   
-
-    console.log(ingredientsList)
-    console.log(appareilsList)
-    console.log(ustensilesList)
-    return {recipes, filtersMgr,renderFilters, ingredientsList, appareilsList, ustensilesList, TreatMainSearchValue, resetDisplay, resetRecipeCards, RenderAllFiltresItems, SetDisplayAllFiltresItems}
+    // console.log(ingredientsList)
+    // console.log(appareilsList)
+    // console.log(ustensilesList)
+    return {recipes, IngredientInRecipe, ingredientsList, appareilsList, ustensilesList, resetRecipeCards}
 }

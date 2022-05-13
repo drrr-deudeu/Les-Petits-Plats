@@ -7,8 +7,8 @@ function recipeFactory(recipeData){
     recipe.ustensils.forEach(ustensil => {
         ustensiles.push({value: ustensil,index: -1})
     })
-    if(id === 1)console.log(ustensiles)
     let display = true
+
     const html = 
         `<div id="cardtop_${id}" class="col-12 col-lg-6 col-xl-4 gy-5 card_top">
             <div id="card_${id}" class="card">
@@ -71,6 +71,12 @@ function recipeFactory(recipeData){
             return
         }
         document.querySelector('#cardtop_'+id).classList.add('not_display')
+        console.log("DISPLAYRECIPE:"+display)
     }
-    return {id, recipe, display, ingredients, appareils, ustensiles, recipeCard, setDisplay}
+
+    function getDisplay(){
+        return display
+    }
+
+    return {id, recipe, getDisplay, ingredients, appareils, ustensiles, recipeCard, setDisplay}
 }

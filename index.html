@@ -47,7 +47,7 @@
                     <div class="row w-75">
                         <div id="ingredient-div" class="mt-2 col-2 pb-0 me-1">
                             <div id="ingredients-button" class="row">
-                                <button id="ingredient-button-open" class="btn btn-primary py-3 filtre-div" onclick="openFilterDivs('Ingredient',2,6)">Ingrédient <img class="ms-5" src="assets/icons/menu-closed.svg" alt="Open Menu"></button>
+                                <button id="ingredient-button-open" class="btn btn-primary py-3 filtre-div" onclick="openFilterDivs('Ingredient',2,6,'incr_',0)">Ingrédient <img class="ms-5" src="assets/icons/menu-closed.svg" alt="Open Menu"></button>
                             </div>
                             <div id="ingredients-input" class="row not_display last_displayed">
                                 <div class="col-12 bg-primary">
@@ -56,7 +56,7 @@
                                             <input id="ingredient-input" name="ingredient-input" type="text" class="bg-primary text-white py-3 filtre-open" placeholder="Rechercher un ingrédient">
                                         </div>
                                         <div class="col-2 p-0">
-                                            <button id="ingredient-button-close" class="btn btn-primary py-3 filtre-open" onclick="closeFilterDivs('Ingredient',2,6)"><img src="assets/icons/menu-opened.svg" alt="Close Menu"></button>
+                                            <button id="ingredient-button-close" class="btn btn-primary py-3 filtre-open" onclick="closeFilterDivs('Ingredient',2,6,'incr_',0)"><img src="assets/icons/menu-opened.svg" alt="Close Menu"></button>
                                         </div>
                                     </div>
                                     <div id="ingredients-fields" class="row not_display">
@@ -69,7 +69,7 @@
                         </div>
                         <div id="appareil-div" class="mt-2 col-2 pb-0 mx-1">
                             <div id="appareils-button" class="row">
-                                <button id="appareil-button-open" class="btn btn-success py-3 filtre-div" onclick="openFilterDivs('Appareil',2,2)">Appareil <img class="ms-5" src="assets/icons/menu-closed.svg" alt="Open Menu"></button>
+                                <button id="appareil-button-open" class="btn btn-success py-3 filtre-div" onclick="openFilterDivs('Appareil',2,2,'app_',1)">Appareil <img class="ms-5" src="assets/icons/menu-closed.svg" alt="Open Menu"></button>
                             </div>
                             <div id="appareils-input" class="row not_display last_displayed">
                                 <div class="col bg-success">
@@ -78,7 +78,7 @@
                                             <input id="appareil-input" name="appareil-input" type="text" class="bg-success text-white py-3 filtre-open" placeholder="Rechercher un appareil">
                                         </div>
                                         <div class="col-2 p-0">
-                                            <button id="appareil-button-close" class="btn btn-success py-3 filtre-open" onclick="closeFilterDivs('Appareil',2,2)"><img src="assets/icons/menu-opened.svg" alt="Close Menu"></button>
+                                            <button id="appareil-button-close" class="btn btn-success py-3 filtre-open" onclick="closeFilterDivs('Appareil',2,2,'app_',1)"><img src="assets/icons/menu-opened.svg" alt="Close Menu"></button>
                                         </div>
                                     </div>
                                     <div id="appareils-fields" class="row not_display">
@@ -91,7 +91,7 @@
                         </div>
                         <div id="ustensile-div" class="mt-2 col-2 pb-0 ms-2">
                             <div id="ustensiles-button" class="row">
-                                <button id="ustensile-button-open" class="btn btn-danger py-3 filtre-div" onclick="openFilterDivs('Ustensile',2,4)">Ustensile <img class="ms-5" src="assets/icons/menu-closed.svg" alt="Open Menu"></button>
+                                <button id="ustensile-button-open" class="btn btn-danger py-3 filtre-div" onclick="openFilterDivs('Ustensile',2,4,'ust_',2)">Ustensile <img class="ms-5" src="assets/icons/menu-closed.svg" alt="Open Menu"></button>
                             </div>
                             <div id="ustensiles-input" class="row not_display last_displayed">
                                 <div class="col bg-danger">
@@ -100,7 +100,7 @@
                                             <input id="ustensile-input" name="ustensile-input" type="text" class="bg-danger text-white py-3" placeholder="Rechercher un ustensile">
                                         </div>
                                         <div class="col-2 p-0">
-                                            <button id="ustensile-button-close" class="btn btn-danger py-3 filtre-open" onclick="closeFilterDivs('Ustensile',2,4)"><img src="assets/icons/menu-opened.svg" alt="Close Menu"></button>
+                                            <button id="ustensile-button-close" class="btn btn-danger py-3 filtre-open" onclick="closeFilterDivs('Ustensile',2,4,'ust_',2)"><img src="assets/icons/menu-opened.svg" alt="Close Menu"></button>
                                         </div>
                                     </div>
                                     <div id="ustensiles-fields" class="row not_display">
@@ -128,6 +128,7 @@
     <!-- App JS -->
     <script src="scripts/datas/recipes.js"></script>
     <script src="scripts/components/recipeCard.js"></script>
+    <script src="scripts/components/tagManager.js"></script>
     <script src="scripts/components/filterDivs.js"></script>
     <script src="scripts/factories/recipesManager.js"></script>
     <script src="scripts/index.js"></script>
