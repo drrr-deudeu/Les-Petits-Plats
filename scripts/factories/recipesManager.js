@@ -36,7 +36,7 @@ function RecipesManagerFactory(recipesData){
             }
             else {
                 ind = managerList.length
-                managerList.push({value:objitem.value,index:ind,ids:[recipeObjId],display: true})
+                managerList.push({value:objitem.value,index:ind,ids:[recipeObjId],display: true, displayInSearch: true})
                 objitem.index = ind
             }
         })

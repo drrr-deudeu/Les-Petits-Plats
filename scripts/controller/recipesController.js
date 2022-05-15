@@ -18,7 +18,7 @@ class RecipesController{
         this.tagsMgr = new TagsManager()
 
         this.DisplayRecipes()
-        this.DisplayFilters()
+        this.renderFilters()
         this.initListeners()
 
         RecipesController.instance = this
@@ -27,6 +27,7 @@ class RecipesController{
     }
 
     AddTag(el){
+        this.filtersMgr.ClearInput(el)
         this.tagsMgr.AddTag(el)
         this.SearchRecipes()
     }
@@ -86,7 +87,6 @@ class RecipesController{
                 recip.setDisplay((flagTabResult[index] && recip.getDisplay())?true:false)
             })
         }
-        this.filtersMgr.renderFilters()
     }
 
     TreatMainSearchValue(){
@@ -128,16 +128,8 @@ class RecipesController{
         divRecipe.innerHTML += render()
     }
     
-    DisplayFilters() {
-        this.renderFilters()
-    }
-
     renderFilters(){
         this.filtersMgr.renderFilters()
-    }
-
-    RenderAllFiltresItems(){
-        this.filtersMgr.RenderAllFiltresItems()
     }
 
     ClearAllFiltresItems(flag){
@@ -146,7 +138,7 @@ class RecipesController{
 
     ClearAndRenderAllFiltresItems(flag) {
         this.ClearAllFiltresItems(flag)
-        this.RenderAllFiltresItems()
+        this.renderFilters()
     }
 
     SetDisplayAllFiltresItems(recipe){
@@ -163,15 +155,8 @@ class RecipesController{
         this._mainSearchValue = ""
         document.querySelector("#mainsearch").addEventListener('input',e => {
             this._mainSearchValue = normalizeString(e.target.value)
-            this.SearchRecipes()  
-        })
-
-        this.filtersMgr._lstMgr.forEach(lm => {
-            this.initFilterListeners(lm)
+            this.SearchRecipes()
         })
     }
 
-    initFilterListeners(lm){
-
-    }
 }
