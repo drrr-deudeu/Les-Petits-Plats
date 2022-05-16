@@ -164,9 +164,10 @@ class ListFilterManager {
                             document.getElementById(this._prefix+index).classList.add('d-none')
                         }
                     }
-//                    this.renderFilter()
+
                 }
             }
+            this.renderFilter()
         })       
     }
 
