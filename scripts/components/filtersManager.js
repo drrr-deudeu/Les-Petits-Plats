@@ -107,10 +107,12 @@ class ListFilterManager {
                     ncol_item = 4
                     break
             }
-            document.querySelector(filterName).innerHTML += `<button class="btn col-${ncol_item} ${this._style} 
+            if(item.display){
+                document.querySelector(filterName).innerHTML += `<button class="btn col-${ncol_item} ${this._style} 
                 text-white item ${this._prefix}item ${(item.display === false || item.displayInSearch === false)?'d-none':''}" id="${this._prefix}${index}" 
                 data-set="${this._list[index].ids}" data-indexfiltre="${this._indexFiltre}" data-name="${item.value}" data-index=${index} data-prefix="${this._prefix}" onclick="clickItem(this)">
                 ${item.value}</button>`
+            }
         })
     }
 
@@ -155,9 +157,9 @@ class ListFilterManager {
                             document.getElementById(this._prefix+index).classList.add('d-none')
                         }
                     }
-//                    this.renderFilter()
                 }
             })
+            this.renderFilter()
         })       
     }
     clearInput(el) {
