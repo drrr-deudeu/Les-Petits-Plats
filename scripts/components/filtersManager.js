@@ -28,7 +28,7 @@ class ListFilterManager {
 
     _nbdisplay()
     {
-        let nb_disp = this._list.filter(elt => elt.display === true).length
+        let nb_disp = this._list.filter(elt => (elt.display === true && elt.displayInSearch)).length
         return nb_disp
     }
 
@@ -107,11 +107,8 @@ class ListFilterManager {
                     ncol_item = 4
                     break
             }
-            if(this.name === 'Sucre'){
-                console.log(this.prefix+"/"+item.value+":"+item.display)
-            }
             document.querySelector(filterName).innerHTML += `<button class="btn col-${ncol_item} ${this._style} 
-                text-white item ${this._prefix}item ${(item.display === false)?'d-none':''}" id="${this._prefix}${index}" 
+                text-white item ${this._prefix}item ${(item.display === false || item.displayInSearch === false)?'d-none':''}" id="${this._prefix}${index}" 
                 data-set="${this._list[index].ids}" data-indexfiltre="${this._indexFiltre}" data-name="${item.value}" data-index=${index} data-prefix="${this._prefix}" onclick="clickItem(this)">
                 ${item.value}</button>`
         })
@@ -158,6 +155,7 @@ class ListFilterManager {
                             document.getElementById(this._prefix+index).classList.add('d-none')
                         }
                     }
+//                    this.renderFilter()
                 }
             })
         })       
