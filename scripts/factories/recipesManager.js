@@ -5,8 +5,9 @@ function RecipesManagerFactory(recipesData){
     const recipes = []
     let ind
 
-    recipesData.forEach(recipe => {
-        let recipeObj = recipeFactory(recipe)
+    let length = recipesData.length
+    for (let kval = 0;kval < length;kval++){
+        let recipeObj = recipeFactory(recipesData[kval])
         recipes.push(recipeObj)
 
         // Ajout ou mise à jour de la liste generale des ingredients
@@ -18,38 +19,47 @@ function RecipesManagerFactory(recipesData){
         // Ajout ou mise à jour de la liste generale des ustensiles
         UpdateList(recipeObj.ustensiles,recipeObj.id,ustensilesList)
 
-    })
+    }
 
     function resetRecipeCards(flag){
-        recipes.forEach(recipe =>{
-            recipe.setDisplay(flag)
-        })
+        let length = recipes.length
+        for(kval = 0;kval<length;kval++){
+            recipes[kval].setDisplay(flag)
+        }
     }
 
     function UpdateList(recipeObjList,recipeObjId,managerList) {
-        recipeObjList.forEach(objitem => {
-            let ingr = managerList
-                .filter(item => normalizeString(item.value) === normalizeString(objitem.value))
+        let mlength
+        let olength = recipeObjList.length
+        let ingr = []
+        for(let dval = 0;dval< olength;dval++){
+            mlength = managerList.length
+            for(let kval = 0;kval < mlength;kval++){
+                if(normalizeString(managerList[kval].value) === normalizeString(recipeObjList[dval].value)){
+                    ingr.push(managerList[kval])
+                    break
+                }
+            }
             if(ingr && ingr.length){
                 ingr[0].ids.push(recipeObjId)
-                objitem.index = ingr[0].index
+                recipeObjList[dval].index = ingr[0].index
             }
             else {
                 ind = managerList.length
-                managerList.push({value:objitem.value,index:ind,ids:[recipeObjId],display: true, displayInSearch: true})
-                objitem.index = ind
+                managerList.push({value:recipeObjList[dval].value,index:ind,ids:[recipeObjId],display: true, displayInSearch: true})
+                recipeObjList[dval].index = ind
             }
-        })
+        }
     }
 
     function SearchInRecipeList(list,value){
         let ret = false
-
-        list.forEach(item => {
-            if(normalizeString(item.value).includes(value)){
+        let length = list.length
+        for(let kval = 0;kval < length; kval++){
+            if(normalizeString(list[kval].value).includes(value)){
                 ret = true
             }
-        })
+        }
         return ret
     }
 

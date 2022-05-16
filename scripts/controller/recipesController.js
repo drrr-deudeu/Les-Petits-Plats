@@ -38,9 +38,10 @@ class RecipesController{
     }
 
     setFlagsTabs(tab){
-        this._recipesManager.recipes.forEach((r,index) => {
+        let length = this._recipesManager.recipes.length
+        for(let index=0;index<length;index++){
             tab.push(0)
-        })
+        }
     }
     
     SearchRecipes(){
@@ -57,35 +58,42 @@ class RecipesController{
         this.setFlagsTabs(flagTabResult,0)
         this.setFlagsTabs(flagTabNew,0)
         let flagFirst = true
-
+        let value_index
         // on filtre les recipes sur la base des tags
         // on parcourt les valeurs => la valeur de l'index dans les listes associées
-        this.prefixs.forEach((prefix,indexliste) => {
-            this.tagsMgr.tagByList[prefix].tagList.forEach(value_index =>{
+        let plength = this.prefixs.length
+        for(let indexliste=0;indexliste<plength;indexliste++){
+            let tlength = this.tagsMgr.tagByList[this.prefixs[indexliste]].tagList.length
+            for(let dval=0;dval<tlength;dval++){
+                value_index = this.tagsMgr.tagByList[this.prefixs[indexliste]].tagList[dval]
                 // les ids des recettes associées
-                this.filtersMgr.lstMgr[indexliste].list[value_index].ids.forEach(id =>{
-                    flagTabNew[id - 1] = 1
+                let ilength = this.filtersMgr.lstMgr[indexliste].list[value_index].ids.length
+                for(let kval=0;kval<ilength;kval++){
+                    flagTabNew[this.filtersMgr.lstMgr[indexliste].list[value_index].ids[kval] - 1] = 1
                     if(flagFirst){
-                        flagTabResult[id - 1] = 1
+                        flagTabResult[this.filtersMgr.lstMgr[indexliste].list[value_index].ids[kval] - 1] = 1
                     }
-                })
+                }
                 flagFirst = false
-                flagTabNew.forEach((v,index) =>{
-                    if(!flagTabResult[index] || !v){
+                let jlength = flagTabNew.length
+                for(let index=0;index<jlength;index++){
+                    if(!flagTabResult[index] || !flagTabNew[index]){
                         flagTabResult[index] = 0
                     }
-                })
-                this.filtersMgr.lstMgr[indexliste].list[value_index].ids.forEach(id =>{
-                    flagTabNew[id - 1] = 0
-                })
-            })
-        })
+                }
+                let klength = this.filtersMgr.lstMgr[indexliste].list[value_index].ids.length
+                for(let kval=0;kval<klength;kval++){
+                    flagTabNew[this.filtersMgr.lstMgr[indexliste].list[value_index].ids[kval] - 1] = 0
+                }
+            }
+        }
         // set Final des displays
         // si il y a au moins un tag:
         if(flagFirst === false){
-            this._recipesManager.recipes.forEach((recip,index) => {
-                recip.setDisplay((flagTabResult[index] && recip.getDisplay())?true:false)
-            })
+            let rlength = this._recipesManager.recipes.length
+            for(let index=0;index<rlength;index++){
+                this._recipesManager.recipes[index].setDisplay((flagTabResult[index] && this._recipesManager.recipes[index].getDisplay())?true:false)
+            }
         }
     }
 
@@ -95,7 +103,10 @@ class RecipesController{
             return
         }
         /* La recherche: d'abord dans le titre, puis dans les ingredients, puis dans la description */
-        this._recipesManager.recipes.forEach(recipe =>{
+        let rlength = this._recipesManager.recipes.length
+        let recipe
+        for(let kval=0;kval<rlength;kval++){
+            recipe = this._recipesManager.recipes[kval]
             if(recipe.getDisplay()){
     
                 if(normalizeString(recipe.recipe.name).includes(value)
@@ -107,21 +118,27 @@ class RecipesController{
                     recipe.setDisplay(false)
                 }
             }
-        })
+        }
     }
 
     SetDisplayAllFiltres(){
         this.ClearAllFiltresItems(false)
-        this._recipesManager.recipes.forEach(recipe => {
+        let rlength = this._recipesManager.recipes.length
+        let recipe
+        for(let kval=0;kval<rlength;kval++){
+            recipe = this._recipesManager.recipes[kval]
             if(recipe.getDisplay())
                 this.SetDisplayAllFiltresItems(recipe)
-        })
+        }
         this.renderFilters()
     }
     
     DisplayRecipes(){
         const divRecipe = document.querySelector("#recipes")
-        this._recipesManager.recipes.forEach(recipe => this.DisplayRecipe(divRecipe,recipe.recipeCard))
+        let rlength = this._recipesManager.recipes.length
+        for(let kval=0;kval<rlength;kval++){
+            this.DisplayRecipe(divRecipe,this._recipesManager.recipes[kval].recipeCard)
+        }
     }
 
     DisplayRecipe(divRecipe,render) {

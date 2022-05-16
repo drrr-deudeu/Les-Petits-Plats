@@ -28,7 +28,12 @@ class ListFilterManager {
 
     _nbdisplay()
     {
-        let nb_disp = this._list.filter(elt => (elt.display === true && elt.displayInSearch)).length
+        let nb_disp = 0
+        const length = this._list.length
+        for(let kval = 0;kval < length;kval++){
+            if(this._list[kval].display === true && this._list[kval].displayInSearch === true)
+                nb_disp++
+        }
         return nb_disp
     }
 
@@ -68,9 +73,10 @@ class ListFilterManager {
     // }
   
     _ClearList(flag) {
-        this._list.forEach(item => {
-            item.display = flag
-        })
+        let length = this._list.length
+        for(let kval=0;kval<length;kval++){        
+            this._list[kval].display = flag
+        }
     }
 
     ncol_div_open() {            
@@ -91,7 +97,8 @@ class ListFilterManager {
 
     _renderList() {
         const filterName = '#filtre-'+this._name+'s'
-        this._list.forEach((item,index) => {
+        let length = this._list.length
+        for(let index= 0;index<length;index++){
             if(index === 0){
                 document.querySelector(filterName).innerHTML = ""    
             }
@@ -108,16 +115,17 @@ class ListFilterManager {
                     break
             }
             document.querySelector(filterName).innerHTML += `<button class="btn col-${ncol_item} ${this._style} 
-                text-white item ${this._prefix}item ${(item.display === false || item.displayInSearch === false)?'d-none':''}" id="${this._prefix}${index}" 
-                data-set="${this._list[index].ids}" data-indexfiltre="${this._indexFiltre}" data-name="${item.value}" data-index=${index} data-prefix="${this._prefix}" onclick="clickItem(this)">
-                ${item.value}</button>`
-        })
+                text-white item ${this._prefix}item ${(this._list[index].display === false || this._list[index].displayInSearch === false)?'d-none':''}" id="${this._prefix}${index}" 
+                data-set="${this._list[index].ids}" data-indexfiltre="${this._indexFiltre}" data-name="${this._list[index].value}" data-index=${index} data-prefix="${this._prefix}" onclick="clickItem(this)">
+                ${this._list[index].value}</button>`
+        }
     }
 
     _SetDisplayItemsFiltre(listRecipe,flag=true) {
-        listRecipe.forEach(elt => {
-            this._list[elt.index].display = flag
-        })
+        let length = listRecipe.length 
+        for(let kval = 0;kval<length;kval++){
+            this._list[listRecipe[kval].index].display = flag
+        }
     }
 
     get list(){
@@ -140,31 +148,35 @@ class ListFilterManager {
     inputListener() {            
         this._elInput.addEventListener('input',e => {
             const searchValue = normalizeString(e.target.value)
-            this._list.forEach((item,index) => {
-                if(item.display === true){
-                    if(normalizeString(item.value).includes(searchValue)){
-                        if(item.displayInSearch === false){
-                            item.displayInSearch = true
-                            document.getElementById(this._prefix+index).classList.remove('d-none')
-        
+            let length = this._list.length
+ 
+            for(let index = 0;index<length;index++){               
+                if(this._list[index].display === true){
+                    if(normalizeString(this._list[index].value).includes(searchValue)){
+                        if(this._list[index].displayInSearch === false){
+                            this._list[index].displayInSearch = true
+                            document.getElementById(this._prefix+index).classList.remove('d-none')        
                         }
                     }
                     else {
-                        if(item.displayInSearch){
-                            item.displayInSearch = false
+                        if(this._list[index].displayInSearch){
+                            this._list[index].displayInSearch = false
                             document.getElementById(this._prefix+index).classList.add('d-none')
                         }
                     }
 //                    this.renderFilter()
                 }
-            })
+            }
         })       
     }
+
     clearInput(el) {
         this._elInput.value = ''
-        this._list.forEach(item => {
-            item.displayInSearch = true
-        })
+        let length = this._list.length
+
+        for(let kval = 0;kval < length; kval++){
+            this._list[kval].displayInSearch = true
+        }
     }
 }
 
@@ -182,21 +194,24 @@ class FiltersManager {
     }
 
     renderFilters(){
-        this._lstMgr.forEach(lm => {
-            lm.renderFilter()
-        })
+        let length = this._lstMgr.length
+        for(let kval = 0;kval<length;kval++){
+            this._lstMgr[kval].renderFilter()
+        }
     }
 
     ClearAllFiltreItems(flag){
-        this._lstMgr.forEach(lm => {
-            lm._ClearList(flag)
-        })
+        let length = this._lstMgr.length
+        for(let kval = 0;kval<length;kval++){
+            this._lstMgr[kval]._ClearList(flag)
+        }
     }
     
     SetDisplayItemsAllFiltres(listesRecipe,flag=true){
-        this._lstMgr.forEach((lm,index) => {
-            lm._SetDisplayItemsFiltre(listesRecipe[index],flag)
-        })
+        let length = this._lstMgr.length
+        for(let index = 0;index<length;index++){
+            this._lstMgr[index]._SetDisplayItemsFiltre(listesRecipe[index],flag)
+        }
     }
 
     closeFilter(indexFiltre) {
@@ -211,11 +226,12 @@ class FiltersManager {
     }
 
     closeOtherFiltres(indexFiltre) {
-        this._lstMgr.forEach((lst,index) => {
+        let length = this._lstMgr.length
+        for(let index = 0;index<length;index++){
             if(index !== indexFiltre){
                 this.closeFilter(index) 
             }
-        })
+        }
     }
 
     openFilter(indexFiltre){
@@ -229,12 +245,14 @@ class FiltersManager {
     }
     
     FiltersListeners(){
-        this._lstMgr.forEach((lst,indexFiltre) => {
-            document.getElementById(lst._name + "-button-open").addEventListener('click',e => this.openFilter(indexFiltre))
-        })
-        this._lstMgr.forEach((lst,indexFiltre) => {
-            document.getElementById(lst._name + "-button-close").addEventListener('click',e => this.closeFilter(indexFiltre))
-        })
+        let length = this._lstMgr.length
+
+        for(let indexFiltre = 0;indexFiltre<length;indexFiltre++){
+            document.getElementById(this._lstMgr[indexFiltre]._name + "-button-open").addEventListener('click',e => this.openFilter(indexFiltre))
+        }
+        for(let indexFiltre = 0;indexFiltre<length;indexFiltre++){
+            document.getElementById(this._lstMgr[indexFiltre]._name + "-button-close").addEventListener('click',e => this.closeFilter(indexFiltre))
+        }
     }
 
     ClearInput(el) {

@@ -4,9 +4,10 @@ function recipeFactory(recipeData){
     const ingredients = []
     const appareils = [{value:recipe.appliance,index: -1}]
     const ustensiles = []
-    recipe.ustensils.forEach(ustensil => {
-        ustensiles.push({value: ustensil,index: -1})
-    })
+    let length = recipe.ustensils.length
+    for(let kval=0;kval<length;kval++){
+        ustensiles.push({value: recipe.ustensils[kval],index: -1})
+    }
     let display = true
 
     const html = 
@@ -47,16 +48,17 @@ function recipeFactory(recipeData){
     
     function renderIngredients(recipe){
         let ingrHTMLList = ""
-        recipe.ingredients.forEach(ingredient =>{
+        let length = recipe.ingredients.length
+        for(let kval = 0;kval<length;kval++){
             ingrHTMLList+=
                 `<div class="row">
                     <p class="ingredient">
-                        <span class="ingredient__name">${AddIngredient(ingredient.ingredient)}</span>
-                        <span class="quantities">${(ingredient.quantity)?":"+ingredient.quantity:""}${(ingredient.unit)?" "+ingredient.unit:""}
+                        <span class="ingredient__name">${AddIngredient(recipe.ingredients[kval].ingredient)}</span>
+                        <span class="quantities">${(recipe.ingredients[kval].quantity)?":"+recipe.ingredients[kval].quantity:""}${(recipe.ingredients[kval].unit)?" "+recipe.ingredients[kval].unit:""}
                         </span>
                     </p>
                 </div>`
-        })
+        }
         return ingrHTMLList
     }
 
