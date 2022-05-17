@@ -11264,6 +11264,7 @@ input.mainsearch::placeholder {
 .tag {
   display: flex;
   flex-wrap: wrap;
+  gap: 10px;
 }
 
 .tag_filtre {
