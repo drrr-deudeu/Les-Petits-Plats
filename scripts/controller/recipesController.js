@@ -28,6 +28,7 @@ class RecipesController{
 
     AddTag(el){
         this.filtersMgr.ClearInput(el)
+        this.filtersMgr.closeFilter(el.dataset.indexfiltre)
         this.tagsMgr.AddTag(el)
         this.SearchRecipes()
     }
@@ -48,7 +49,8 @@ class RecipesController{
         // on reset les recipes sur la base true
         this.resetDisplay(true)
         this.FiltreRecipes()
-        this.TreatMainSearchValue()
+        // this.TreatMainSearchValue()
+        TreatMainSearchValue(this)
         this.SetDisplayAllFiltres()
     }
 
@@ -97,29 +99,30 @@ class RecipesController{
         }
     }
 
-    TreatMainSearchValue(){
-        let value = this._mainSearchValue
-        if(value.length < 3){
-            return
-        }
-        /* La recherche: d'abord dans le titre, puis dans les ingredients, puis dans la description */
-        let rlength = this._recipesManager.recipes.length
-        let recipe
-        for(let kval=0;kval<rlength;kval++){
-            recipe = this._recipesManager.recipes[kval]
-            if(recipe.getDisplay()){
+    // Cette fonction a été sortie de la classe afin de faciliter l'utilisation de jsbench
+    // TreatMainSearchValue(){
+    //     let value = this._mainSearchValue
+    //     if(value.length < 3){
+    //         return
+    //     }
+    //     /* La recherche: d'abord dans le titre, puis dans les ingredients, puis dans la description */
+    //     let rlength = this._recipesManager.recipes.length
+    //     let recipe
+    //     for(let kval=0;kval<rlength;kval++){
+    //         recipe = this._recipesManager.recipes[kval]
+    //         if(recipe.getDisplay()){
     
-                if(normalizeString(recipe.recipe.name).includes(value)
-                    || this._recipesManager.IngredientInRecipe(recipe,value)
-                    || normalizeString(recipe.recipe.description).includes(value)){
-                    recipe.setDisplay(true)
-                }
-                else {
-                    recipe.setDisplay(false)
-                }
-            }
-        }
-    }
+    //             if(normalizeString(recipe.recipe.name).includes(value)
+    //                 || this._recipesManager.IngredientInRecipe(recipe,value)
+    //                 || normalizeString(recipe.recipe.description).includes(value)){
+    //                 recipe.setDisplay(true)
+    //             }
+    //             else {
+    //                 recipe.setDisplay(false)
+    //             }
+    //         }
+    //     }
+    // }
 
     SetDisplayAllFiltres(){
         this.ClearAllFiltresItems(false)

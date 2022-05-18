@@ -31,8 +31,8 @@ function RecipesManagerFactory(recipesData){
     function UpdateList(recipeObjList,recipeObjId,managerList) {
         let mlength
         let olength = recipeObjList.length
-        let ingr = []
         for(let dval = 0;dval< olength;dval++){
+            let ingr = []
             mlength = managerList.length
             for(let kval = 0;kval < mlength;kval++){
                 if(normalizeString(managerList[kval].value) === normalizeString(recipeObjList[dval].value)){

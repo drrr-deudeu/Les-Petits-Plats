@@ -57,7 +57,7 @@ class ListFilterManager {
     renderColsList(){
         const div = document.getElementById(this._name+'-div')
         if(this._open)
-            div.setAttribute('class',`mt-2 pb-0 me-1 col-${this.ncol_div_open()}`)    
+            div.setAttribute('class',`mt-2 pb-0 me-3 col-${this.ncol_div_open()}`)    
     }
 
     // _RenderDisplayItem(item,index) {
@@ -219,7 +219,7 @@ class FiltersManager {
         if(this._lstMgr[indexFiltre].open) {
             this._lstMgr[indexFiltre].setOpen(false)
             const div = document.getElementById(this._lstMgr[indexFiltre]._name+'-div')
-            div.setAttribute('class','mt-2 pb-0 me-1 col-2')
+            div.setAttribute('class','mt-2 pb-0 me-3 col-2')
             document.getElementById(this._lstMgr[indexFiltre]._name+"s-fields").classList.add("not_display")
             document.getElementById(this._lstMgr[indexFiltre]._name+"s-input").classList.add("not_display")
             document.getElementById(this._lstMgr[indexFiltre]._name+"s-button").classList.remove("not_display")
@@ -239,7 +239,7 @@ class FiltersManager {
         this.closeOtherFiltres(indexFiltre)
         const div = document.getElementById(this._lstMgr[indexFiltre]._name+'-div')
         this._lstMgr[indexFiltre].openFiltre()
-        div.setAttribute('class',`mt-2 pb-0 me-1 col-${this._lstMgr[indexFiltre].ncol_div_open()}`)
+        div.setAttribute('class',`mt-2 pb-0 me-3 col-${this._lstMgr[indexFiltre].ncol_div_open()}`)
         document.getElementById(this._lstMgr[indexFiltre]._name+"s-input").classList.remove("not_display")
         document.getElementById(this._lstMgr[indexFiltre]._name+"s-fields").classList.remove("not_display")
         document.getElementById(this._lstMgr[indexFiltre]._name+"s-button").classList.add("not_display")

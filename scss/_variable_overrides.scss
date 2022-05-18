@@ -22,16 +22,27 @@ body {
     z-index: 99;
     position: absolute;
 }
-.allfilters {
-    z-index: 99;
-    width: 100%;
-    position: absolute;
+// .allfilters {
+//     z-index: 99;
+//     width: 100%;
+//     position: absolute;
+// }
+
+#ingredient-div, #appareil-div, #ustensile-div {
+    border-radius: 5px;
+}
+.div-input {
+    border-radius: 5px;
 }
 
 .btn {
     border-radius: 5px;
     height: 100%;
+    color: #FFFFFF;
 }
+// .filtre-open {
+//     color: #FFFFFF;
+// }
 .btn.filtre-open{
     border-radius: 0 5px 0 0;
     border-left: none;
@@ -39,12 +50,41 @@ body {
 
 input.filtre-open{
     border-radius: 5px 0 0 0;
-    border-right: none;
+    border: none;
+    outline: none;
 }
 
 input {
     border-radius: 5px;
     width: 100%;
+    font-size: 18px;
+    font-family: 'Lato', sans-serif;
+    font-weight: 700;
+    border: none;
+    outline: none;
+}
+
+:focus-visible {
+    border: none;
+    box-shadow: none;
+    outline: none;
+}
+input.mainsearch::placeholder {
+    opacity: 25%;
+}
+
+.input-filter {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+.input-filter input::placeholder {
+    color: white;
+    opacity: 50%;
+    font-size: 18px;
+    font-family: 'Lato', sans-serif;
+    font-weight: 700;
 }
 
 /* filtres */
@@ -55,6 +95,10 @@ input {
     width: 100%;
 }
 
+
+.btn-success:hover, .btn-primary:hover, .btn-danger:hover{
+    color: #FFFFFF;
+}
 /* Ingredients */
 #ingredients-button.not_display{
     display: none;
@@ -101,17 +145,31 @@ input {
     display: none;
 }
 
+.tag {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
 .tag_filtre {
     border-radius: 5px;
-    width: 100%;
+    // width: 100%;
+    width: auto;
 }
 .tag_contain {
+//    align-items: flex-start;
+//    flex-direction: row;
+    display: flex;
     align-items: center;
-    flex-direction: row;
+    justify-content: center;
+    padding-left: 10px;
+    padding-right: 0px;
 }
 .tag_name {
     color: white;
     text-align: center;
+    font-family: 'Lato', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
 }
 
 .card{
