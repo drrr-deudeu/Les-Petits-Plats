@@ -67,8 +67,17 @@ function RecipesManagerFactory(recipesData){
         return SearchInRecipeList(recipe.ingredients,value)
     }
 
-    console.log(ingredientsList)
-    console.log(appareilsList)
-    console.log(ustensilesList)
-    return {recipes, IngredientInRecipe, ingredientsList, appareilsList, ustensilesList, resetRecipeCards}
+    function recipesDisplayedCount() {
+        let count = 0
+        const rlength = recipes.length
+        for(let kval = 0; kval < rlength; kval++)
+            if(recipes[kval].getDisplay() === true)
+                count++
+        return count
+    }
+
+    // console.log(ingredientsList)
+    // console.log(appareilsList)
+    // console.log(ustensilesList)
+    return {recipes, IngredientInRecipe, ingredientsList, appareilsList, ustensilesList, resetRecipeCards, recipesDisplayedCount}
 }
