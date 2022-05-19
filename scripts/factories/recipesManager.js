@@ -57,8 +57,12 @@ function RecipesManagerFactory(recipesData){
         return SearchInRecipeList(recipe.ingredients,value)
     }
 
-    console.log(ingredientsList)
-    console.log(appareilsList)
-    console.log(ustensilesList)
-    return {recipes, IngredientInRecipe, ingredientsList, appareilsList, ustensilesList, resetRecipeCards}
+    function recipesDisplayedCount() {
+        return recipes.filter(recipe => recipe.getDisplay() === true).length
+    }
+
+    // console.log(ingredientsList)
+    // console.log(appareilsList)
+    // console.log(ustensilesList)
+    return {recipes, IngredientInRecipe, ingredientsList, appareilsList, ustensilesList, resetRecipeCards, recipesDisplayedCount}
 }

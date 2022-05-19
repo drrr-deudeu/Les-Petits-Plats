@@ -51,6 +51,9 @@ class RecipesController{
         // this.TreatMainSearchValue()
         TreatMainSearchValue(this)
         this.SetDisplayAllFiltres()
+        if(this._recipesManager.recipesDisplayedCount())
+            document.getElementById("anyrecipe").classList.add("d-none")
+        else document.getElementById("anyrecipe").classList.remove("d-none")
     }
 
     FiltreRecipes(){
