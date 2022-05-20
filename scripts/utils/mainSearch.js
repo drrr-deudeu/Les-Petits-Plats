@@ -4,19 +4,19 @@ function TreatMainSearchValue(recipesCtrl){
         return
     }
     /* La recherche: d'abord dans le titre, puis dans les ingredients, puis dans la description */
-    let rlength = recipesCtrl._recipesManager.recipes.length
-    let recipe
+    const rlength = recipesCtrl._recipesManager.recipes.length
+//    let recipe
     for(let kval=0;kval<rlength;kval++){
         recipe = recipesCtrl._recipesManager.recipes[kval]
-        if(recipe.getDisplay()){
+        if(recipesCtrl._recipesManager.recipes[kval].getDisplay()){
 
-            if(normalizeString(recipe.recipe.name).includes(value)
-                || recipesCtrl._recipesManager.IngredientInRecipe(recipe,value)
-                || normalizeString(recipe.recipe.description).includes(value)){
-                recipe.setDisplay(true)
+            if(normalizeString(recipesCtrl._recipesManager.recipes[kval].recipe.name).includes(value)
+                || recipesCtrl._recipesManager.IngredientInRecipe(recipesCtrl._recipesManager.recipes[kval],value)
+                || normalizeString(recipesCtrl._recipesManager.recipes[kval].recipe.description).includes(value)){
+                    recipesCtrl._recipesManager.recipes[kval].setDisplay(true)
             }
             else {
-                recipe.setDisplay(false)
+                recipesCtrl._recipesManager.recipes[kval].setDisplay(false)
             }
         }
     }
