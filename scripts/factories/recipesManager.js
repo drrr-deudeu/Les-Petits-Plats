@@ -8,7 +8,7 @@ function RecipesManagerFactory(recipesData){
     let length = recipesData.length
     for (let kval = 0;kval < length;kval++){
         let recipeObj = recipeFactory(recipesData[kval])
-        recipes.push(recipeObj)
+        push(recipes,recipeObj)
 
         // Ajout ou mise à jour de la liste generale des ingredients
         UpdateList(recipeObj.ingredients,recipeObj.id,ingredientsList)
@@ -36,17 +36,17 @@ function RecipesManagerFactory(recipesData){
             mlength = managerList.length
             for(let kval = 0;kval < mlength;kval++){
                 if(normalizeString(managerList[kval].value) === normalizeString(recipeObjList[dval].value)){
-                    ingr.push(managerList[kval])
+                    push(ingr,managerList[kval])
                     break
                 }
             }
             if(ingr && ingr.length){
-                ingr[0].ids.push(recipeObjId)
+                push(ingr[0].ids,recipeObjId)
                 recipeObjList[dval].index = ingr[0].index
             }
             else {
                 ind = managerList.length
-                managerList.push({value:recipeObjList[dval].value,index:ind,ids:[recipeObjId],display: true, displayInSearch: true})
+                push(managerList,{value:recipeObjList[dval].value,index:ind,ids:[recipeObjId],display: true, displayInSearch: true})
                 recipeObjList[dval].index = ind
             }
         }

@@ -6,7 +6,7 @@ function recipeFactory(recipeData){
     const ustensiles = []
     let length = recipe.ustensils.length
     for(let kval=0;kval<length;kval++){
-        ustensiles.push({value: recipe.ustensils[kval],index: -1})
+        push(ustensiles,{value: recipe.ustensils[kval],index: -1})
     }
     let display = true
 
@@ -42,7 +42,7 @@ function recipeFactory(recipeData){
         </div>`
 
     function AddIngredient(ingredient){
-        ingredients.push({value:ingredient,index: -1})
+        push(ingredients,{value:ingredient,index: -1})
         return ingredient
     }
     

@@ -41,7 +41,7 @@ class RecipesController{
     setFlagsTabs(tab){
         let length = this._recipesManager.recipes.length
         for(let index=0;index<length;index++){
-            tab.push(0)
+            push(tab,0)
         }
     }
     

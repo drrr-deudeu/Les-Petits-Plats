@@ -9,14 +9,16 @@ class TagsByList {
     }
 
     AddTag(el) {
-        if(this.tagList.indexOf(el.dataset.index)===-1){
-            this.tagList.push(el.dataset.index)
+        if(indexOf(this.tagList,el.dataset.index)===-1){
+            // this.tagList.push(el.dataset.index)
+            push(this.tagList,el.dataset.index)
             this.render(el)
         }
     }
 
     RemoveTag(el) {  
-        this.tagList.splice(this.tagList.indexOf(el.dataset.index),1)
+        // this.tagList.splice(this.tagList.indexOf(el.dataset.index),1)
+        splice(this.tagList,indexOf(this.tagList,el.dataset.index))
         document.getElementById(el.dataset.id).remove()
     }
 
